@@ -3,16 +3,15 @@ USN : 1PI12IS024
 
 Question No-1
 Consider a sales based application. The main purpose of the program is to take as an input a .csv filename that is passed in the command line argument. This file will comprise of the following details: 
-Name of the item sold, Cost Price of the item, Selling Price of the Item 
+Name of the item sold, Cost Price of the item, Selling Price of the Item, Type
 Eg: 
-Item, CostPrice, SellingPrice 
-Keyboard, 3450, 4000 
-Mouse, 500, 600 
-… 
- 
-The .csv file will comprise of the details of the sales of the enterprise for one day. Using the details from the .csv file, compute the net profit/loss of the enterprise for one day.  
+Item, CostPrice, SellingPrice, Type 
+Keyboard, 3450, 4000, Used 
+Mouse, 500, 600, Unused
 
-File(s) Submitted:asn2_1.c which contains the source code of the program and a csv file called Sales.csv which consists of sales of enterprise 
+The .csv file will comprise of the details of the sales of the enterprise for one day. Using the details from the .csv file, compute the net profit/loss of the enterprise for one day of used and Unused item seperately.  
+
+File(s) Submitted:asn3_1.c which contains the source code of the program and a csv file called Sales.csv which consists of sales of enterprise 
 
 Program execution:
 
@@ -28,6 +27,7 @@ I have handled many error that could happen, like
 1) Characters in the Cost Price and Selling Price Field.
 2) Improper format of passing argument
 3) Incorrect File name
+4) Other than 'Used' and 'Unused' string in type field
 
 Bugs in the program(that could crash my program)
 1)If selling price/Cost Price is greater than 8 digit number, it will show wrong result

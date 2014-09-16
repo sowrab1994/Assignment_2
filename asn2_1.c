@@ -3,7 +3,7 @@ Author:B M Sowrab
 Function:Sales Based Application
 Description:Computes the net profit/loss of the enterprise for one day.
 Parameter: A csv File
-Returns:Profit/Loss Amount
+Returns:Profit/Loss Amount of used and unused item 
 */
 
 #include<stdio.h>
@@ -11,13 +11,15 @@ Returns:Profit/Loss Amount
 #include<unistd.h>
 #include<string.h>
 void CreateLog(char *);
-int getProfit(char *);
+int getProfit(char *,int*);
 
 int main(int argc,char *argv[])
 {
-	int Profit=0,flag=0;
+	int flag=0;
 	char *cvalue1=NULL;
 	int c;
+	int Profit[2]={0,0};
+	
 	while((c=getopt(argc,argv,"f:"))!=-1)
 	switch(c)
 	{
@@ -26,7 +28,7 @@ int main(int argc,char *argv[])
 				break;
 	
 		default:    
-	  			printf("Please enter as -f <input_file>\n");
+	  			printf("Please enter as -f <input_file> \n");
 	        	return 1;
 	}
 	if(cvalue1==NULL)
@@ -34,28 +36,31 @@ int main(int argc,char *argv[])
 		printf("\nParameters required ");
 		return 0;
 	}
-	Profit=getProfit(cvalue1);
-	if(Profit>0)
-		printf("Net Profit=Rs %d",Profit);
-	else if(Profit<0)
-		printf("Net Loss=Rs %d",(-1*Profit));
+	getProfit(cvalue1,Profit);
+	if(Profit[0]>0)
+		printf("\nNet Profit(Used items)=Rs %d",Profit[0]);
+	else if(Profit[0]<0)
+		printf("\nNet Loss(Used items)=Rs %d",(-1*Profit[0]));
 	else
-		printf("\nNeither loss nor Profit");	
-	return 0;
+		printf("\nNeither loss nor Profit(Used items)");	
+	if(Profit[1]>0)
+		printf("\nNet Profit(Unused items)=Rs %d",Profit[1]);
+	else if(Profit[1]<0)
+		printf("\nNet Loss(Unused items)=Rs %d",(-1*Profit[1]));
+	else
+		printf("\nNeither loss nor Profit(Unused items)");	
 
-	
 return 0;
+
 }
 
 
-int getProfit(char *cvalue1)
+int getProfit(char *cvalue1,int *Profit)
 {
 	FILE *fp,*f1;
-	char str[100];
-	int CostPrice,SellPrice,Profit=0;
+	char str[100],item_type[50];
+	int CostPrice,SellPrice;
 	int i=0,j;
-
-
 	char Cost[10],Sell[10];
 	fp=fopen(cvalue1,"r");
 	if(!fp)
@@ -84,17 +89,43 @@ int getProfit(char *cvalue1)
 		i++;
 		Cost[j]='\0';
 		j=0;
-		while(str[i]!='\n')
-		{	
+		while(str[i]!=',')
+		{
 			Sell[j]=str[i];
-			i++;j++;
+			i++;j++;	
 		}
-		Sell[j]='\0';													
+		i++;
+		Sell[j]='\0';
+		j=0;
+		while(str[i]!='\n')
+		{
+			item_type[j]=str[i];
+			i++;j++;	
+		}
+		item_type[j]='\0';
+		for(i=0;Sell[i]!='\0';i++)
+		{
+			if(!isdigit(Sell[i]))
+			{
+				printf("\nThe selling price field in csv file has to be digits ");
+				exit(0);
+			}
+		}
 		CostPrice=atoi(Cost);
-		SellPrice=atoi(Sell);
-		Profit=Profit+(SellPrice-CostPrice);
-	}
+		SellPrice=atoi(Sell);		
+		if(item_type[1]=='s')
+		{	
+			Profit[0]=Profit[0]+(SellPrice-CostPrice);
+		}
+		else if(item_type[1]=='n')
+		{
+			Profit[1]=Profit[1]+(SellPrice-CostPrice);
+		}
+		else 
+		{
+			printf("\nInvalid item type given in file");
+			exit(1);		
+		}
+	}	
 	fclose(fp);
-	return Profit;
 }
-

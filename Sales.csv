@@ -1,5 +1,5 @@
-Item,CostPrice,SellingPrice
-Moniter,4400,6000
-CPU,11200,15600
-Keyboard,1060,1500
-Mouse,350,569
+Item,CostPrice,SellingPrice,Type
+Moniter,4400,6000,Unused
+CPU,11200,15600,Used
+Keyboard,1060,1500,Used
+Mouse,350,569,Unused
